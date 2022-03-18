@@ -1,6 +1,7 @@
 const { User, Thought } = require("../models");
+// const { param } = require("../routes");
 
-module.exports = {
+const userController = {
   // Get all users
   getAllUsers(req, res) {
     User.find()
@@ -53,7 +54,32 @@ module.exports = {
       .then(() => res.json({ message: "User and associated apps deleted!" }))
       .catch((err) => res.status(500).json(err));
   },
-//   add a friend to user
-
-// remove a friend from user
+  //   add a friend to user
+  addFriend(req, res) {
+    console.log("You are adding an friend");
+    console.log(req.body);
+    User.findOneAndUpdate({ _id: req.params.userId },
+      { $addToSet: { friends: param.friendId } },
+      { runValidators: true, new: true })
+      .then((user) =>
+        !user
+          ? res.status(404) .json({ message: "No User found with that ID :(" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // remove a friend from user
+   removeFriend(req, res) {
+    User.findOneAndUpdate({ _id: req.params.friendId },
+      { $pull: { friends: req.params.userId } },
+      { runValidators: true, new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user found with this friend ID :(' })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
 };
+module.exports = userController;

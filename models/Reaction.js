@@ -1,5 +1,5 @@
 const { Schema, model, Types } = require("mongoose");
-// const moment = require("moment");
+const moment = require("moment");
 
 const reactionSchema = new Schema(
   {
@@ -30,5 +30,6 @@ const reactionSchema = new Schema(
     id: false,
   }
 );
+const Reaction = model("Reaction", reactionSchema);
 
 module.exports = reactionSchema;
