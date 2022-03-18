@@ -5,7 +5,7 @@ const userController = {
   // Get all users
   getAllUsers(req, res) {
     User.find()
-      .then((users) => res.json(users))
+      .then((user) => res.json(user))
       .catch((err) => res.status(500).json(err));
   },
   // Get a single user
@@ -35,7 +35,7 @@ const userController = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No user with this id!" })
-          : res.json(application)
+          : res.json(user)
       )
       .catch((err) => {
         console.log(err);
@@ -59,7 +59,7 @@ const userController = {
     console.log("You are adding an friend");
     console.log(req.body);
     User.findOneAndUpdate({ _id: req.params.userId },
-      { $addToSet: { friends: param.friendId } },
+      { $addToSet: { friends: params.friendId } },
       { runValidators: true, new: true })
       .then((user) =>
         !user
