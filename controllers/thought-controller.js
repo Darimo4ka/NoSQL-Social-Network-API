@@ -32,17 +32,26 @@ const thoughtController = {
   },
 
   // POST /api/thoughts
-  createThought({ params, body }, res) {
-    Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
-      .then((thought) => {
-        if (!thought) {
-          res.status(404).json({ message: "No s id" });
-          return;
-        }
-        res.json(thought);
-      })
-      .catch((err) => res.status(400).json(err));
-  },
+createThought({ params, body }, res) {
+    Thought.create(body)
+        .then(createdThought => {
+            return User.findOneAndUpdate(
+                { _id: params.userId },
+                { $push: { thoughts: createdThought._id } },
+                { new: true }
+            );
+        })
+        .then(updatedUser => {
+            if (!updatedUser) {
+                return res.status(404).json({ message: "Thought created but not attached to the user" });
+            }
+            res.json({ message: "Thought successfully created" });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json(err);
+        });
+},
   // PUT /api/thoughts/:id
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
@@ -85,7 +94,7 @@ const thoughtController = {
       { $addToSet: { reactions: body } },
       { new: true, runValidators: true }
     )
-      .then((thought) => {
+      .then( (thought) => {
         if (!thought) {
           res.status(404).json({ message: "No thought found with this id" });
           return;
