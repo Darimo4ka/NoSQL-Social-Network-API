@@ -32,26 +32,17 @@ const thoughtController = {
   },
 
   // POST /api/thoughts
-  createThought({ body }, res) {
-    Thought.create(body)
+  createThought({ params, body }, res) {
+    Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
       .then((thought) => {
-        User.findOneAndUpdate(
-          { _id: body.userId },
-          { $push: { thoughts: thought._id } },
-          { new: true }
-        )
-          .then((user) => {
-            if (!user) {
-              res.status(404).json({ message: "No user found with this id" });
-              return;
-            }
-            res.json(user);
-          })
-          .catch((err) => res.json(err));
+        if (!thought) {
+          res.status(404).json({ message: "No s id" });
+          return;
+        }
+        res.json(thought);
       })
       .catch((err) => res.status(400).json(err));
   },
-
   // PUT /api/thoughts/:id
   updateThought({ params, body }, res) {
     Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })

@@ -1,5 +1,5 @@
 const { User, Thought } = require("../models");
-// const { param } = require("../routes");
+const { params } = require("../routes");
 
 const userController = {
   // Get all users
@@ -12,7 +12,7 @@ const userController = {
   getUserById(req, res) {
     User.findOne({ _id: req.params.userId })
       .select("-__v")
-      .then((user) =>
+      .then(async (user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID" })
           : res.json(user)
@@ -28,11 +28,11 @@ const userController = {
   // update user information using the findOneAndUpdate method. Uses the ID, and the $set operator in mongodb to inject the request body. Enforces validation.
   updateUser(req, res) {
     User.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.userId },
       { $set: req.body },
       { runValidators: true, new: true }
     )
-      .then((user) =>
+      .then(async (user) =>
         !user
           ? res.status(404).json({ message: "No user with this id!" })
           : res.json(user)

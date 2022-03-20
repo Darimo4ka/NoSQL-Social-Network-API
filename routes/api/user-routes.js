@@ -13,13 +13,18 @@ router.route("/")
 .get(getAllUsers)
 .post(createUser);
 // /api/user iformation update
-router.route("/:id")
+router.route("/:userId")
 .get(getUserById)
 .put(updateUser)
 .delete(deleteUser);
+
 //  api for user related data like friend add and delete
-router.route("/:userId/friends/:friendId")
-.post(addFriend)
-.delete(removeFriend);
+// /api/users/:id/friends/:friendid
+
+router.route("/:userId/friends/:friendId").post(addFriend).delete(removeFriend);
+
+// router.route("/:userId/friends/:friendId")
+// .post(addFriend)
+// .delete(removeFriend);
 
 module.exports = router;
