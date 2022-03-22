@@ -93,7 +93,14 @@ const thoughtController = {
   addReaction(req, res) {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
-      {$addToSet: {reactions: {username: req.body.username,reactionBody: req.body.reactionBody}}},
+      {
+        $addToSet: {
+          reactions: {
+            username: req.body.username,
+            reactionBody: req.body.reactionBody,
+          },
+        },
+      },
       { new: true, runValidators: true }
     )
       .then((thought) =>
@@ -105,21 +112,19 @@ const thoughtController = {
   },
 
   // DELETE /api/thoughts/:id/reactions
-  deleteReaction({ params, body }, res) {
-    Thought.findOneAndUpdate(
-      { _id: params.thoughtId },
-      { $pull: { reactions: { reactionId: body.reactionId } } },
-      { new: true, runValidators: true }
-    )
-      .then((thought) => {
-        if (!thought) {
-          res.status(404).json({ message: "No thought found with this id" });
-          return;
-        }
-        res.json({ message: "Successfully deleted the reaction" });
-      })
-      .catch((err) => res.status(500).json(err));
-  },
+  deleteReaction(req, res) {
+     Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
+            { new: true, runValidators: true }
+        )
+        .then((thought) => 
+            !thought
+                ? res.status(404).json({ message: 'No thought found with that ID!'})
+                : res.status(200).json({ message: 'Reaction deleted and removed from associated thought'})
+        )
+        .catch((err) => res.status(500).json(err));
+    }
 };
 
 module.exports = thoughtController;
