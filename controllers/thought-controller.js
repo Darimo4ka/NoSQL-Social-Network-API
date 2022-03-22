@@ -113,11 +113,12 @@ const thoughtController = {
 
   // DELETE /api/thoughts/:id/reactions
   deleteReaction(req, res) {
+    console.log(req.params.reactionId);
      Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
             { $pull: { reactions: { reactionId: req.params.reactionId } } },
             { new: true, runValidators: true }
-        )
+     )
         .then((thought) => 
             !thought
                 ? res.status(404).json({ message: 'No thought found with that ID!'})
