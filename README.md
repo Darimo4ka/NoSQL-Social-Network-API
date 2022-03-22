@@ -176,6 +176,7 @@ This will not be a model, but rather will be used as the `reaction` field's subd
 
 ## Deployed: 
  [GitHub for NoSQL-Social-Network-API](https://github.com/Darimo4ka/NoSQL-Social-Network-API)
+ [Google drive link](https://drive.google.com/file/d/1Uvp_OAmdJEOOSLkN3mXKFUt62scQ6s5n/view?usp=sharing)
 
 ---
 © 2022 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.

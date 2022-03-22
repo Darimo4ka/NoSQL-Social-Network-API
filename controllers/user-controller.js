@@ -1,5 +1,5 @@
 const { User, Thought } = require("../models");
-const { params } = require("../routes");
+// const { params } = require("../routes");
 
 const userController = {
   // Get all users

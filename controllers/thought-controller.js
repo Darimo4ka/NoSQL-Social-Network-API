@@ -32,11 +32,12 @@ const thoughtController = {
   },
 
   // POST /api/thoughts
-  createThought({ params, body }, res) {
+  createThought( {body} , res) {
     Thought.create(body)
       .then((createdThought) => {
+        console.log(createdThought);
         return User.findOneAndUpdate(
-          { _id: body.userId },
+          { username: createdThought.username },
           { $push: { thoughts: createdThought._id } },
           { new: true }
         );
@@ -49,6 +50,7 @@ const thoughtController = {
         }
         res.json({ message: "Thought successfully created" });
       })
+
       .catch((err) => {
         console.error(err);
         res.status(500).json(err);
